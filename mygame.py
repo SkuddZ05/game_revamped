@@ -36,6 +36,7 @@ CAR_W, CAR_H = 40, 70
 RACE_DISTANCE = 3000   # "finish line" distance for Race vs Opponent
 TRIAL_DISTANCE = 2000  # distance for one Time Trial lap
 
+#function for times
 def load_best_time():
     if os.path.exists(RECORD_FILE):
         try:
