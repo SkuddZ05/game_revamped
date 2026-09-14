@@ -68,3 +68,21 @@ def draw_button(text, cx, cy, w=280, h=60, base_color=BLUE, hover=False):
     pygame.draw.rect(screen, WHITE, rect, width=2, border_radius=14)
     draw_text_center(text, FONT_MED, WHITE, cx, cy)
     return rect
+
+
+#draw road
+def draw_road(scroll_offset):
+    screen.fill((25, 100, 40))  # grass
+    pygame.draw.rect(screen, ROAD, (ROAD_LEFT, 0, ROAD_RIGHT - ROAD_LEFT, HEIGHT))
+    # lane dashes scrolling
+    dash_h = 40
+    gap = 30
+    total = dash_h + gap
+    start = -(scroll_offset % total)
+    y = start
+    while y < HEIGHT:
+        pygame.draw.rect(screen, LINE_COLOR, (WIDTH // 2 - 4, y, 8, dash_h))
+        y += total
+    # edges
+    pygame.draw.rect(screen, WHITE, (ROAD_LEFT - 6, 0, 6, HEIGHT))
+    pygame.draw.rect(screen, WHITE, (ROAD_RIGHT, 0, 6, HEIGHT))
