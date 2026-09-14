@@ -45,7 +45,16 @@ def load_best_time():
         except Exception:
             return None
     return None
+#function for best time
 
 def save_best_time(t):
     with open(RECORD_FILE, "w") as f:
         json.dump({"best_time": t}, f)
+
+
+#draw text
+def draw_text_center(text, font, color, cx, cy):
+    surf = font.render(text, True, color)
+    rect = surf.get_rect(center=(cx, cy))
+    screen.blit(surf, rect)
+    return rect
