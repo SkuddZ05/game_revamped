@@ -58,3 +58,13 @@ def draw_text_center(text, font, color, cx, cy):
     rect = surf.get_rect(center=(cx, cy))
     screen.blit(surf, rect)
     return rect
+
+#draw button
+def draw_button(text, cx, cy, w=280, h=60, base_color=BLUE, hover=False):
+    rect = pygame.Rect(0, 0, w, h)
+    rect.center = (cx, cy)
+    color = tuple(min(255, c + 30) for c in base_color) if hover else base_color
+    pygame.draw.rect(screen, color, rect, border_radius=14)
+    pygame.draw.rect(screen, WHITE, rect, width=2, border_radius=14)
+    draw_text_center(text, FONT_MED, WHITE, cx, cy)
+    return rect
