@@ -288,3 +288,53 @@ def win_lose_screen(placement):
         pygame.display.flip()
         clock.tick(FPS)
 
+#time trial race and lap times
+def race_solo_time_trial():
+    player_x = WIDTH // 2
+    progress = 0.0
+    speed = 0.0
+    max_speed = 9.5
+    accel = 0.22
+    brake = 0.35
+    friction = 0.06
+    scroll = 0.0
+
+    start_time = time.time()
+    finish_time = None
+
+    while finish_time is None:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            handle_quit(event)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            player_x -= 5
+        if keys[pygame.K_RIGHT]:
+            player_x += 5
+        player_x = max(ROAD_LEFT + CAR_W // 2 + 4, min(ROAD_RIGHT - CAR_W // 2 - 4, player_x))
+
+        if keys[pygame.K_UP]:
+            speed = min(max_speed, speed + accel)
+        elif keys[pygame.K_DOWN]:
+            speed = max(0, speed - brake)
+        else:
+            speed = max(0, speed - friction)
+
+        progress += speed
+        scroll += speed
+
+        if progress >= TRIAL_DISTANCE:
+            finish_time = time.time() - start_time
+
+        draw_road(scroll)
+        draw_car(player_x, 560, BLUE)
+
+        pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
+        pygame.draw.rect(screen, GREEN, (20, 20, int(200 * min(1, progress / TRIAL_DISTANCE)), 14), border_radius=6)
+        elapsed = time.time() - start_time
+        draw_text_center(f"Time: {elapsed:.2f}s", FONT_SMALL, WHITE, WIDTH - 80, 30)
+
+        pygame.display.flip()
+
+    return finish_time  # lap time recorded
