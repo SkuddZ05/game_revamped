@@ -363,3 +363,38 @@ def time_trial_result_screen(lap_time):
         draw_text_center("Press any key to continue", FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 80)
         pygame.display.flip()
         clock.tick(FPS)
+
+#play again screen
+def play_again_screen():
+    while True:
+        mouse = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            handle_quit(event)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if btn_yes.collidepoint(mouse):
+                    return True
+                if btn_no.collidepoint(mouse):
+                    return False
+            if event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_y, pygame.K_RETURN):
+                    return True
+                if event.key in (pygame.K_n, pygame.K_ESCAPE):
+                    return False
+
+        screen.fill(BLACK)
+        draw_text_center("PLAY AGAIN?", FONT_BIG, WHITE, WIDTH // 2, HEIGHT // 2 - 100)
+        btn_yes = pygame.Rect(0, 0, 120, 60)
+        btn_yes.center = (WIDTH // 2 - 90, HEIGHT // 2)
+        btn_no = pygame.Rect(0, 0, 120, 60)
+        btn_no.center = (WIDTH // 2 + 90, HEIGHT // 2)
+
+        color_yes = tuple(min(255, c + 30) for c in GREEN) if btn_yes.collidepoint(mouse) else GREEN
+        color_no = tuple(min(255, c + 30) for c in RED) if btn_no.collidepoint(mouse) else RED
+        pygame.draw.rect(screen, color_yes, btn_yes, border_radius=12)
+        pygame.draw.rect(screen, color_no, btn_no, border_radius=12)
+        draw_text_center("YES", FONT_MED, WHITE, btn_yes.centerx, btn_yes.centery)
+        draw_text_center("NO", FONT_MED, WHITE, btn_no.centerx, btn_no.centery)
+        draw_text_center("(Y / N or click)", FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 90)
+
+        pygame.display.flip()
+        clock.tick(FPS)
