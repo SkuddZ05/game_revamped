@@ -106,3 +106,12 @@ def wait_for_key_or_click():
             if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
                 return
         clock.tick(FPS)
+
+#quit game
+def handle_quit(event):
+    if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        pygame.quit()
+        sys.exit()
