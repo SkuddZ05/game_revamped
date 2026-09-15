@@ -96,3 +96,13 @@ def draw_car(x, y, color, w=CAR_W, h=CAR_H):
     ws = pygame.Rect(0, 0, w - 14, h // 3)
     ws.center = (x, y - h // 6)
     pygame.draw.rect(screen, (200, 230, 255), ws, border_radius=4)
+
+#input controls
+def wait_for_key_or_click():
+    """Blocks (while still handling quit/esc) until a key or click happens."""
+    while True:
+        for event in pygame.event.get():
+            handle_quit(event)
+            if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
+                return
+        clock.tick(FPS)
