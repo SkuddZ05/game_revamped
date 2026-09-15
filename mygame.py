@@ -338,3 +338,28 @@ def race_solo_time_trial():
         pygame.display.flip()
 
     return finish_time  # lap time recorded
+
+#new fastest lap and save tim / current best time 
+def time_trial_result_screen(lap_time):
+    best = load_best_time()
+    is_new_record = (best is None) or (lap_time < best)
+    if is_new_record:
+        save_best_time(lap_time)
+        headline, color = "NEW RECORD!", GREEN
+        sub = f"Time: {lap_time:.2f}s"
+    else:
+        headline, color = "Lap complete", YELLOW
+        sub = f"Time: {lap_time:.2f}s   |   Best: {best:.2f}s"
+
+    start = time.time()
+    while True:
+        for event in pygame.event.get():
+            handle_quit(event)
+            if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN) and time.time() - start > 0.4:
+                return
+        screen.fill(BLACK)
+        draw_text_center(headline, FONT_BIG, color, WIDTH // 2, HEIGHT // 2 - 40)
+        draw_text_center(sub, FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2 + 20)
+        draw_text_center("Press any key to continue", FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 80)
+        pygame.display.flip()
+        clock.tick(FPS)
