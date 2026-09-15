@@ -86,3 +86,13 @@ def draw_road(scroll_offset):
     # edges
     pygame.draw.rect(screen, WHITE, (ROAD_LEFT - 6, 0, 6, HEIGHT))
     pygame.draw.rect(screen, WHITE, (ROAD_RIGHT, 0, 6, HEIGHT))
+
+#draw car
+def draw_car(x, y, color, w=CAR_W, h=CAR_H):
+    body = pygame.Rect(0, 0, w, h)
+    body.center = (x, y)
+    pygame.draw.rect(screen, color, body, border_radius=8)
+    # windshield
+    ws = pygame.Rect(0, 0, w - 14, h // 3)
+    ws.center = (x, y - h // 6)
+    pygame.draw.rect(screen, (200, 230, 255), ws, border_radius=4)
