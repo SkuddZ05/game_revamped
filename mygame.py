@@ -165,3 +165,15 @@ def choose_game_mode():
         draw_text_center("Press 1 or click for Race, 2 or click for Time Trial", FONT_SMALL, GRAY, WIDTH // 2, 640)
         pygame.display.flip()
         clock.tick(FPS)
+
+#selection between time trial or opponent
+def transition_screen(text, sub, duration=1.2):
+    start = time.time()
+    while time.time() - start < duration:
+        for event in pygame.event.get():
+            handle_quit(event)
+        screen.fill(BLACK)
+        draw_text_center(text, FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2 - 20)
+        draw_text_center(sub, FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 30)
+        pygame.display.flip()
+        clock.tick(FPS)
