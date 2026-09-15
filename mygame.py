@@ -177,3 +177,15 @@ def transition_screen(text, sub, duration=1.2):
         draw_text_center(sub, FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 30)
         pygame.display.flip()
         clock.tick(FPS)
+
+#countdown
+def countdown():
+    for label, color in [("3", RED), ("2", YELLOW), ("1", GREEN), ("GO!", GREEN)]:
+        start = time.time()
+        while time.time() - start < 0.7:
+            for event in pygame.event.get():
+                handle_quit(event)
+            screen.fill(BLACK)
+            draw_text_center(label, FONT_BIG, color, WIDTH // 2, HEIGHT // 2)
+            pygame.display.flip()
+            clock.tick(FPS)
