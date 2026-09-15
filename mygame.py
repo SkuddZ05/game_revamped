@@ -115,3 +115,20 @@ def handle_quit(event):
     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
         pygame.quit()
         sys.exit()
+
+#loading screen
+def loading_screen():
+    start = time.time()
+    duration = 1.6
+    while time.time() - start < duration:
+        for event in pygame.event.get():
+            handle_quit(event)
+        screen.fill(BLACK)
+        draw_text_center("RACING GAME", FONT_BIG, WHITE, WIDTH // 2, HEIGHT // 2 - 40)
+        progress = (time.time() - start) / duration
+        bar_w = 300
+        pygame.draw.rect(screen, GRAY, (WIDTH // 2 - bar_w // 2, HEIGHT // 2 + 20, bar_w, 20), border_radius=10)
+        pygame.draw.rect(screen, GREEN, (WIDTH // 2 - bar_w // 2, HEIGHT // 2 + 20, int(bar_w * progress), 20), border_radius=10)
+        draw_text_center("Loading...", FONT_SMALL, WHITE, WIDTH // 2, HEIGHT // 2 + 70)
+        pygame.display.flip()
+        clock.tick(FPS)
