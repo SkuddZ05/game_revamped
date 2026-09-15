@@ -189,3 +189,81 @@ def countdown():
             draw_text_center(label, FONT_BIG, color, WIDTH // 2, HEIGHT // 2)
             pygame.display.flip()
             clock.tick(FPS)
+
+#race opponent
+def race_against_opponent():
+    player_x = WIDTH // 2
+    player_progress = 0.0
+    opp_progress = 0.0
+    speed = 0.0
+    max_speed = 9.0
+    accel = 0.22
+    brake = 0.35
+    friction = 0.06
+    opp_base_speed = random.uniform(5.6, 6.6)
+
+    scroll = 0.0
+    finished_player = False
+    finished_opp = False
+    result = None  # "1st" or "2nd"
+
+    while result is None:
+        dt = clock.tick(FPS) / 1000.0
+        for event in pygame.event.get():
+            handle_quit(event)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            player_x -= 5
+        if keys[pygame.K_RIGHT]:
+            player_x += 5
+        player_x = max(ROAD_LEFT + CAR_W // 2 + 4, min(ROAD_RIGHT - CAR_W // 2 - 4, player_x))
+
+        if keys[pygame.K_UP]:
+            speed = min(max_speed, speed + accel)
+        elif keys[pygame.K_DOWN]:
+            speed = max(0, speed - brake)
+        else:
+            speed = max(0, speed - friction)
+
+        if not finished_player:
+            player_progress += speed
+        if not finished_opp:
+            opp_progress += opp_base_speed + random.uniform(-1.2, 1.2)
+            opp_progress = max(opp_progress, 0)
+
+        scroll += speed
+
+        if player_progress >= RACE_DISTANCE and not finished_player:
+            finished_player = True
+        if opp_progress >= RACE_DISTANCE and not finished_opp:
+            finished_opp = True
+
+        if finished_player and finished_opp:
+            result = "1st" if player_progress >= opp_progress and finished_player and (not finished_opp or player_progress >= opp_progress) else "2nd"
+            # simpler: whichever crossed distance conceptually first -> compare finish order
+        elif finished_player:
+            result = "1st"
+        elif finished_opp:
+            result = "2nd"
+
+        # ---- draw ----
+        draw_road(scroll)
+        opp_x = WIDTH // 2 + 60
+        draw_car(opp_x, 180, RED)
+        draw_car(player_x, 560, BLUE)
+
+        # progress bars
+        pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
+        pygame.draw.rect(screen, BLUE, (20, 20, int(200 * min(1, player_progress / RACE_DISTANCE)), 14), border_radius=6)
+        draw_text_center("YOU", FONT_SMALL, WHITE, 250, 27)
+
+        pygame.draw.rect(screen, GRAY, (20, 44, 200, 14), border_radius=6)
+        pygame.draw.rect(screen, RED, (20, 44, int(200 * min(1, opp_progress / RACE_DISTANCE)), 14), border_radius=6)
+        draw_text_center("CPU", FONT_SMALL, WHITE, 250, 51)
+
+        draw_text_center(f"Speed: {speed:.1f}", FONT_SMALL, WHITE, WIDTH - 70, 30)
+
+        pygame.display.flip()
+
+    return result  # "1st" or "2nd"
