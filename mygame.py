@@ -267,3 +267,24 @@ def race_against_opponent():
         pygame.display.flip()
 
     return result  # "1st" or "2nd"
+
+#win or lose screen
+def win_lose_screen(placement):
+    if placement == "1st":
+        text, color = "YOU WIN!", GREEN
+    else:
+        text, color = "YOU LOSE", RED
+
+    start = time.time()
+    while True:
+        for event in pygame.event.get():
+            handle_quit(event)
+            if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN) and time.time() - start > 0.4:
+                return
+        screen.fill(BLACK)
+        draw_text_center(text, FONT_BIG, color, WIDTH // 2, HEIGHT // 2 - 40)
+        draw_text_center(f"Finish placement: {placement}", FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2 + 20)
+        draw_text_center("Press any key to continue", FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 80)
+        pygame.display.flip()
+        clock.tick(FPS)
+
