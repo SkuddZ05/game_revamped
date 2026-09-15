@@ -398,3 +398,16 @@ def play_again_screen():
 
         pygame.display.flip()
         clock.tick(FPS)
+
+#quit game screen
+def quit_game_screen():
+    start = time.time()
+    while time.time() - start < 1.2:
+        for event in pygame.event.get():
+            handle_quit(event)
+        screen.fill(BLACK)
+        draw_text_center("Thanks for playing!", FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2)
+        pygame.display.flip()
+        clock.tick(FPS)
+    pygame.quit()
+    sys.exit()
