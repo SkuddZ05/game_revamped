@@ -132,3 +132,36 @@ def loading_screen():
         draw_text_center("Loading...", FONT_SMALL, WHITE, WIDTH // 2, HEIGHT // 2 + 70)
         pygame.display.flip()
         clock.tick(FPS)
+
+#gamemode selection
+def choose_game_mode():
+    best = load_best_time()
+    while True:
+        mouse = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            handle_quit(event)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if btn_race.collidepoint(mouse):
+                    return "race"
+                if btn_trial.collidepoint(mouse):
+                    return "trial"
+            if event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_1, pygame.K_r):
+                    return "race"
+                if event.key in (pygame.K_2, pygame.K_t):
+                    return "trial"
+
+        screen.fill(BLACK)
+        draw_text_center("CHOOSE GAME MODE", FONT_MED, WHITE, WIDTH // 2, 140)
+        btn_race = draw_button("Race vs Opponent", WIDTH // 2, 320, hover=False)
+        btn_trial = draw_button("Time Trial", WIDTH // 2, 400, base_color=(150, 90, 200), hover=False)
+        # re-draw with hover highlight
+        btn_race = draw_button("Race vs Opponent", WIDTH // 2, 320,
+                                hover=btn_race.collidepoint(mouse))
+        btn_trial = draw_button("Time Trial", WIDTH // 2, 400, base_color=(150, 90, 200),
+                                 hover=btn_trial.collidepoint(mouse))
+        if best is not None:
+            draw_text_center(f"Best Time Trial: {best:.2f}s", FONT_SMALL, YELLOW, WIDTH // 2, 460)
+        draw_text_center("Press 1 or click for Race, 2 or click for Time Trial", FONT_SMALL, GRAY, WIDTH // 2, 640)
+        pygame.display.flip()
+        clock.tick(FPS)
