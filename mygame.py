@@ -411,3 +411,32 @@ def quit_game_screen():
         clock.tick(FPS)
     pygame.quit()
     sys.exit()
+
+#main flow of the game
+def main():
+    loading_screen()
+
+    while True:  # "Back to main menu" loop / "Play again?" loop
+        mode = choose_game_mode()
+
+        if mode == "race":
+            transition_screen("Match with opponent", "Finding a racer for you...")
+            countdown()
+            placement = race_against_opponent()   # "Finish placement?"
+            win_lose_screen(placement)             # Win screen / Lose screen
+
+        else:  # "trial"
+            transition_screen("Start time trial", "Get ready to set a lap time...")
+            countdown()
+            lap_time = race_solo_time_trial()      # Race solo for fastest lap + Record lap times
+            time_trial_result_screen(lap_time)      # New fastest time? -> Save/Show best
+
+        # "Back to main menu" -> "Play again?"
+        again = play_again_screen()
+        if not again:
+            quit_game_screen()  # No -> Quit game
+        # Yes -> loop back to "Choose game mode"
+
+
+if __name__ == "__main__":
+    main()
