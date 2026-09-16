@@ -9,7 +9,7 @@ pygame.init()
 
 WIDTH, HEIGHT = 600, 920
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Racing Game")
+pygame.display.set_caption("Southern Velocity")
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -119,12 +119,12 @@ def handle_quit(event):
 #loading screen
 def loading_screen():
     start = time.time()
-    duration = 1.6
+    duration = 2.1
     while time.time() - start < duration:
         for event in pygame.event.get():
             handle_quit(event)
         screen.fill(BLACK)
-        draw_text_center("RACING GAME", FONT_BIG, WHITE, WIDTH // 2, HEIGHT // 2 - 40)
+        draw_text_center("SOUTHERN VELOCITY", FONT_BIG, WHITE, WIDTH // 2, HEIGHT // 2 - 40)
         progress = (time.time() - start) / duration
         bar_w = 300
         pygame.draw.rect(screen, GRAY, (WIDTH // 2 - bar_w // 2, HEIGHT // 2 + 20, bar_w, 20), border_radius=10)
@@ -152,7 +152,7 @@ def choose_game_mode():
                     return "trial"
 
         screen.fill(BLACK)
-        draw_text_center("CHOOSE GAME MODE", FONT_MED, WHITE, WIDTH // 2, 140)
+        draw_text_center("SELECT GAME MODE", FONT_MED, WHITE, WIDTH // 2, 140)
         btn_race = draw_button("Race vs Opponent", WIDTH // 2, 320, hover=False)
         btn_trial = draw_button("Time Trial", WIDTH // 2, 400, base_color=(150, 90, 200), hover=False)
         # re-draw with hover highlight
