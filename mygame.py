@@ -7,7 +7,7 @@ import time
 
 pygame.init()
 
-WIDTH, HEIGHT = 600, 920
+WIDTH, HEIGHT = 720, 920
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Southern Velocity")
 clock = pygame.time.Clock()
@@ -17,15 +17,15 @@ FONT_BIG = pygame.font.SysFont("arial", 48, bold=True)
 FONT_MED = pygame.font.SysFont("arial", 30, bold=True)
 FONT_SMALL = pygame.font.SysFont("arial", 20)
 
-WHITE = (245, 245, 245)
-BLACK = (20, 20, 20)
-GRAY = (60, 60, 60)
+WHITE = (255, 255, 255, 0.651)
+MAROON = (107, 26, 42)
+GRAY = (225, 225, 225)
 ROAD = (40, 40, 45)
 LINE_COLOR = (230, 200, 60)
 BLUE = (70, 130, 220)
-RED = (210, 70, 70)
+BLACK = (20, 20, 20)
 GREEN = (70, 200, 120)
-YELLOW = (240, 210, 90)
+YELLOW = (232, 160, 32)
 
 RECORD_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "best_time.json")
 
@@ -60,7 +60,7 @@ def draw_text_center(text, font, color, cx, cy):
     return rect
 
 #draw button
-def draw_button(text, cx, cy, w=280, h=60, base_color=BLUE, hover=False):
+def draw_button(text, cx, cy, w=280, h=60, base_color=YELLOW, hover=False):
     rect = pygame.Rect(0, 0, w, h)
     rect.center = (cx, cy)
     color = tuple(min(255, c + 30) for c in base_color) if hover else base_color
@@ -123,12 +123,12 @@ def loading_screen():
     while time.time() - start < duration:
         for event in pygame.event.get():
             handle_quit(event)
-        screen.fill(BLACK)
+        screen.fill(MAROON)
         draw_text_center("SOUTHERN VELOCITY", FONT_BIG, WHITE, WIDTH // 2, HEIGHT // 2 - 40)
         progress = (time.time() - start) / duration
-        bar_w = 300
+        bar_w = 400
         pygame.draw.rect(screen, GRAY, (WIDTH // 2 - bar_w // 2, HEIGHT // 2 + 20, bar_w, 20), border_radius=10)
-        pygame.draw.rect(screen, GREEN, (WIDTH // 2 - bar_w // 2, HEIGHT // 2 + 20, int(bar_w * progress), 20), border_radius=10)
+        pygame.draw.rect(screen, YELLOW, (WIDTH // 2 - bar_w // 2, HEIGHT // 2 + 20, int(bar_w * progress), 20), border_radius=10)
         draw_text_center("Loading...", FONT_SMALL, WHITE, WIDTH // 2, HEIGHT // 2 + 70)
         pygame.display.flip()
         clock.tick(FPS)
@@ -151,7 +151,7 @@ def choose_game_mode():
                 if event.key in (pygame.K_2, pygame.K_t):
                     return "trial"
 
-        screen.fill(BLACK)
+        screen.fill(MAROON)
         draw_text_center("SELECT GAME MODE", FONT_MED, WHITE, WIDTH // 2, 140)
         btn_race = draw_button("Race vs Opponent", WIDTH // 2, 320, hover=False)
         btn_trial = draw_button("Time Trial", WIDTH // 2, 400, base_color=(150, 90, 200), hover=False)
@@ -172,20 +172,20 @@ def transition_screen(text, sub, duration=1.2):
     while time.time() - start < duration:
         for event in pygame.event.get():
             handle_quit(event)
-        screen.fill(BLACK)
-        draw_text_center(text, FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2 - 20)
+        screen.fill(MAROON)
+        draw_text_center(text, FONT_MED, GRAY, WIDTH // 2, HEIGHT // 2 - 20)
         draw_text_center(sub, FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 30)
         pygame.display.flip()
         clock.tick(FPS)
 
 #countdown
 def countdown():
-    for label, color in [("3", RED), ("2", YELLOW), ("1", GREEN), ("GO!", GREEN)]:
+    for label, color in [("3", BLACK), ("2", YELLOW), ("1", WHITE), ("GO!", YELLOW)]:
         start = time.time()
         while time.time() - start < 0.7:
             for event in pygame.event.get():
                 handle_quit(event)
-            screen.fill(BLACK)
+            screen.fill(MAROON)
             draw_text_center(label, FONT_BIG, color, WIDTH // 2, HEIGHT // 2)
             pygame.display.flip()
             clock.tick(FPS)
@@ -250,17 +250,17 @@ def race_against_opponent():
         # ---- draw ----
         draw_road(scroll)
         opp_x = WIDTH // 2 + 60
-        draw_car(opp_x, 180, RED)
-        draw_car(player_x, 560, BLUE)
+        draw_car(opp_x, 180, MAROON)
+        draw_car(player_x, 560, BLACK)
 
         # progress bars
         pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
-        pygame.draw.rect(screen, BLUE, (20, 20, int(200 * min(1, player_progress / RACE_DISTANCE)), 14), border_radius=6)
-        draw_text_center("YOU", FONT_SMALL, WHITE, 250, 27)
+        pygame.draw.rect(screen, YELLOW, (20, 20, int(200 * min(1, player_progress / RACE_DISTANCE)), 14), border_radius=6)
+        draw_text_center("YOU", FONT_SMALL, GRAY, 250, 27)
 
         pygame.draw.rect(screen, GRAY, (20, 44, 200, 14), border_radius=6)
-        pygame.draw.rect(screen, RED, (20, 44, int(200 * min(1, opp_progress / RACE_DISTANCE)), 14), border_radius=6)
-        draw_text_center("CPU", FONT_SMALL, WHITE, 250, 51)
+        pygame.draw.rect(screen, MAROON, (20, 44, int(200 * min(1, opp_progress / RACE_DISTANCE)), 14), border_radius=6)
+        draw_text_center("CPU", FONT_SMALL, GRAY, 250, 51)
 
         draw_text_center(f"Speed: {speed:.1f}", FONT_SMALL, WHITE, WIDTH - 70, 30)
 
@@ -271,9 +271,9 @@ def race_against_opponent():
 #win or lose screen
 def win_lose_screen(placement):
     if placement == "1st":
-        text, color = "YOU WIN!", GREEN
+        text, color = "YOU WIN!", WHITE
     else:
-        text, color = "YOU LOSE", RED
+        text, color = "YOU LOSE", GRAY
 
     start = time.time()
     while True:
@@ -281,7 +281,7 @@ def win_lose_screen(placement):
             handle_quit(event)
             if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN) and time.time() - start > 0.4:
                 return
-        screen.fill(BLACK)
+        screen.fill(MAROON)
         draw_text_center(text, FONT_BIG, color, WIDTH // 2, HEIGHT // 2 - 40)
         draw_text_center(f"Finish placement: {placement}", FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2 + 20)
         draw_text_center("Press any key to continue", FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 80)
@@ -328,7 +328,7 @@ def race_solo_time_trial():
             finish_time = time.time() - start_time
 
         draw_road(scroll)
-        draw_car(player_x, 560, BLUE)
+        draw_car(player_x, 560, BLACK)
 
         pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
         pygame.draw.rect(screen, GREEN, (20, 20, int(200 * min(1, progress / TRIAL_DISTANCE)), 14), border_radius=6)
@@ -345,7 +345,7 @@ def time_trial_result_screen(lap_time):
     is_new_record = (best is None) or (lap_time < best)
     if is_new_record:
         save_best_time(lap_time)
-        headline, color = "NEW RECORD!", GREEN
+        headline, color = "NEW RECORD!", GRAY
         sub = f"Time: {lap_time:.2f}s"
     else:
         headline, color = "Lap complete", YELLOW
@@ -357,7 +357,7 @@ def time_trial_result_screen(lap_time):
             handle_quit(event)
             if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN) and time.time() - start > 0.4:
                 return
-        screen.fill(BLACK)
+        screen.fill(MAROON)
         draw_text_center(headline, FONT_BIG, color, WIDTH // 2, HEIGHT // 2 - 40)
         draw_text_center(sub, FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2 + 20)
         draw_text_center("Press any key to continue", FONT_SMALL, GRAY, WIDTH // 2, HEIGHT // 2 + 80)
@@ -381,7 +381,7 @@ def play_again_screen():
                 if event.key in (pygame.K_n, pygame.K_ESCAPE):
                     return False
 
-        screen.fill(BLACK)
+        screen.fill(MAROON)
         draw_text_center("PLAY AGAIN?", FONT_BIG, WHITE, WIDTH // 2, HEIGHT // 2 - 100)
         btn_yes = pygame.Rect(0, 0, 120, 60)
         btn_yes.center = (WIDTH // 2 - 90, HEIGHT // 2)
@@ -389,7 +389,7 @@ def play_again_screen():
         btn_no.center = (WIDTH // 2 + 90, HEIGHT // 2)
 
         color_yes = tuple(min(255, c + 30) for c in GREEN) if btn_yes.collidepoint(mouse) else GREEN
-        color_no = tuple(min(255, c + 30) for c in RED) if btn_no.collidepoint(mouse) else RED
+        color_no = tuple(min(255, c + 30) for c in BLACK) if btn_no.collidepoint(mouse) else BLACK
         pygame.draw.rect(screen, color_yes, btn_yes, border_radius=12)
         pygame.draw.rect(screen, color_no, btn_no, border_radius=12)
         draw_text_center("YES", FONT_MED, WHITE, btn_yes.centerx, btn_yes.centery)
@@ -405,7 +405,7 @@ def quit_game_screen():
     while time.time() - start < 1.2:
         for event in pygame.event.get():
             handle_quit(event)
-        screen.fill(BLACK)
+        screen.fill(MAROON)
         draw_text_center("Thanks for playing!", FONT_MED, WHITE, WIDTH // 2, HEIGHT // 2)
         pygame.display.flip()
         clock.tick(FPS)
