@@ -180,7 +180,7 @@ def transition_screen(text, sub, duration=1.2):
 
 #countdown
 def countdown():
-    for label, color in [("3", BLACK), ("2", YELLOW), ("1", WHITE), ("GO!", YELLOW)]:
+    for label, color in [("3", WHITE), ("2", YELLOW), ("1", WHITE), ("GO!", YELLOW)]:
         start = time.time()
         while time.time() - start < 0.7:
             for event in pygame.event.get():
@@ -251,7 +251,7 @@ def race_against_opponent():
         draw_road(scroll)
         opp_x = WIDTH // 2 + 60
         draw_car(opp_x, 180, MAROON)
-        draw_car(player_x, 560, BLACK)
+        draw_car(player_x, 560, YELLOW)
 
         # progress bars
         pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
@@ -328,7 +328,7 @@ def race_solo_time_trial():
             finish_time = time.time() - start_time
 
         draw_road(scroll)
-        draw_car(player_x, 560, BLACK)
+        draw_car(player_x, 560, YELLOW)
 
         pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
         pygame.draw.rect(screen, GREEN, (20, 20, int(200 * min(1, progress / TRIAL_DISTANCE)), 14), border_radius=6)
