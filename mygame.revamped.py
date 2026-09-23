@@ -26,6 +26,7 @@ BLUE = (70, 130, 220)
 BLACK = (20, 20, 20)
 GREEN = (70, 200, 120)
 YELLOW = (232, 160, 32)
+RED = (220, 60, 60)
 
 RECORD_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "best_time.json")
 
@@ -35,6 +36,8 @@ CAR_W, CAR_H = 40, 70
 
 RACE_DISTANCE = 3000   # "finish line" distance for Race vs Opponent
 TRIAL_DISTANCE = 2000  # distance for one Time Trial lap
+
+WRONG_WAY_HOLD_TIME = 1.0  # seconds the down arrow must be held to trigger the warning
 
 #function for times
 def load_best_time():
@@ -94,8 +97,16 @@ def draw_car(x, y, color, w=CAR_W, h=CAR_H):
     pygame.draw.rect(screen, color, body, border_radius=8)
     # windshield
     ws = pygame.Rect(0, 0, w - 14, h // 3)
-    ws.center = (x, y - h // 6)
+    ws.center = (x, y - h // 15)
     pygame.draw.rect(screen, (200, 230, 255), ws, border_radius=4)
+
+#draw "WRONG WAY!" warning banner
+def draw_wrong_way_warning():
+    banner = pygame.Rect(0, 0, WIDTH - 40, 60)
+    banner.center = (WIDTH // 2, 100)
+    pygame.draw.rect(screen, RED, banner, border_radius=10)
+    pygame.draw.rect(screen, WHITE, banner, width=2, border_radius=10)
+    draw_text_center("WRONG WAY!", FONT_MED, WHITE, WIDTH // 2, 100)
 
 #input controls
 def wait_for_key_or_click():
