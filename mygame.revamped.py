@@ -7,7 +7,7 @@ import time
 
 pygame.init()
 
-WIDTH, HEIGHT = 720, 920
+WIDTH, HEIGHT = 720, 820
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Southern Velocity")
 clock = pygame.time.Clock()
@@ -218,6 +218,8 @@ def race_against_opponent():
     finished_opp = False
     result = None  # "1st" or "2nd"
 
+    down_hold_start = None  # tracks how long K_DOWN has been held
+
     while result is None:
         dt = clock.tick(FPS) / 1000.0
         for event in pygame.event.get():
@@ -236,6 +238,17 @@ def race_against_opponent():
             speed = max(0, speed - brake)
         else:
             speed = max(0, speed - friction)
+
+        # track how long the down arrow has been held
+        if keys[pygame.K_DOWN]:
+            if down_hold_start is None:
+                down_hold_start = time.time()
+        else:
+            down_hold_start = None
+        show_wrong_way = (
+            down_hold_start is not None
+            and (time.time() - down_hold_start) >= WRONG_WAY_HOLD_TIME
+        )
 
         if not finished_player:
             player_progress += speed
@@ -275,6 +288,9 @@ def race_against_opponent():
 
         draw_text_center(f"Speed: {speed:.1f}", FONT_SMALL, WHITE, WIDTH - 70, 30)
 
+        if show_wrong_way:
+            draw_wrong_way_warning()
+
         pygame.display.flip()
 
     return result  # "1st" or "2nd"
@@ -313,6 +329,8 @@ def race_solo_time_trial():
     start_time = time.time()
     finish_time = None
 
+    down_hold_start = None  # tracks how long K_DOWN has been held
+
     while finish_time is None:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -332,6 +350,17 @@ def race_solo_time_trial():
         else:
             speed = max(0, speed - friction)
 
+        # track how long the down arrow has been held
+        if keys[pygame.K_DOWN]:
+            if down_hold_start is None:
+                down_hold_start = time.time()
+        else:
+            down_hold_start = None
+        show_wrong_way = (
+            down_hold_start is not None
+            and (time.time() - down_hold_start) >= WRONG_WAY_HOLD_TIME
+        )
+
         progress += speed
         scroll += speed
 
@@ -346,11 +375,14 @@ def race_solo_time_trial():
         elapsed = time.time() - start_time
         draw_text_center(f"Time: {elapsed:.2f}s", FONT_SMALL, WHITE, WIDTH - 80, 30)
 
+        if show_wrong_way:
+            draw_wrong_way_warning()
+
         pygame.display.flip()
 
     return finish_time  # lap time recorded
 
-#new fastest lap and save tim / current best time 
+#new fastest lap and save time / current best time 
 def time_trial_result_screen(lap_time):
     best = load_best_time()
     is_new_record = (best is None) or (lap_time < best)

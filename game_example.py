@@ -7,7 +7,7 @@ import time
 
 pygame.init()
 
-WIDTH, HEIGHT = 720, 920
+WIDTH, HEIGHT = 720, 820
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Southern Velocity")
 clock = pygame.time.Clock()
@@ -382,7 +382,7 @@ def race_solo_time_trial():
 
     return finish_time  # lap time recorded
 
-#new fastest lap and save tim / current best time 
+#new fastest lap and save time / current best time 
 def time_trial_result_screen(lap_time):
     best = load_best_time()
     is_new_record = (best is None) or (lap_time < best)
