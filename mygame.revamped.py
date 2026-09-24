@@ -371,7 +371,7 @@ def race_solo_time_trial():
         draw_car(player_x, 560, YELLOW)
 
         pygame.draw.rect(screen, GRAY, (20, 20, 200, 14), border_radius=6)
-        pygame.draw.rect(screen, GREEN, (20, 20, int(200 * min(1, progress / TRIAL_DISTANCE)), 14), border_radius=6)
+        pygame.draw.rect(screen, YELLOW, (20, 20, int(200 * min(1, progress / TRIAL_DISTANCE)), 14), border_radius=6)
         elapsed = time.time() - start_time
         draw_text_center(f"Time: {elapsed:.2f}s", FONT_SMALL, WHITE, WIDTH - 80, 30)
 
